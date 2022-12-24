@@ -1,5 +1,3 @@
-# app/crud/meeting_room.py
-
 from typing import Optional
 
 from sqlalchemy import select
@@ -12,12 +10,10 @@ from schemas.meeting_room import MeetingRoomCreate
 
 async def create_meeting_room(
         new_room: MeetingRoomCreate,
-        # Добавляем новый параметр.
         session: AsyncSession,
 ) -> MeetingRoom:
     new_room_data = new_room.dict()
     db_room = MeetingRoom(**new_room_data)
-    # Убираем контекстный менеджер.
     session.add(db_room)
     await session.commit()
     await session.refresh(db_room)
@@ -26,10 +22,8 @@ async def create_meeting_room(
 
 async def get_room_id_by_name(
         room_name: str,
-        # Добавляем новый параметр.
         session: AsyncSession,
 ) -> Optional[int]:
-    # Убираем контекстный менеджер.
     db_room_id = await session.execute(
         select(MeetingRoom.id).where(
             MeetingRoom.name == room_name
@@ -37,6 +31,19 @@ async def get_room_id_by_name(
     )
     db_room_id = db_room_id.scalars().first()
     return db_room_id
+
+
+async def get_meeting_room_by_id(
+    room_id: int,
+    session: AsyncSession,
+) -> Optional[MeetingRoom]:
+    db_room = await session.execute(
+        select(MeetingRoom).where(
+            MeetingRoom.id == room_id
+        )
+    )
+    room = db_room.scalars().first()
+    return room
 
 
 async def read_all_rooms_from_db(

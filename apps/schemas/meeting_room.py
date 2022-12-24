@@ -23,6 +23,10 @@ class MeetingRoomCreate(MeetingRoomBase):
         return value
 
 
+class MeetingRoomUpdate(MeetingRoomBase):
+    pass
+
+
 # Возвращаемую схему унаследуем от MeetingRoomCreate, 
 # чтобы снова не описывать обязательное поле name.
 class MeetingRoomDB(MeetingRoomCreate):
