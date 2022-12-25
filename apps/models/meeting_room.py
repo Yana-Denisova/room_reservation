@@ -5,7 +5,7 @@ from sqlalchemy import Column, String, Text
 from sqlalchemy.orm import relationship
 
 # Импортируем базовый класс для моделей.
-from apps.core.db import Base
+from core.db import Base
 
 
 class MeetingRoom(Base):

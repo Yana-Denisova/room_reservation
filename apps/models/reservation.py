@@ -1,6 +1,6 @@
 from sqlalchemy import Column, DateTime, ForeignKey, Integer
 
-from apps.core.db import Base
+from core.db import Base
 
 
 class Reservation(Base):
