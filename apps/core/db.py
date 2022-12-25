@@ -4,7 +4,7 @@ from sqlalchemy import Column, Integer
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import declarative_base, declared_attr, sessionmaker
 
-from core.config import settings
+from .config import settings
 
 
 class PreBase:
