@@ -11,10 +11,7 @@ from schemas.meeting_room import (
     MeetingRoomCreate, MeetingRoomDB, MeetingRoomUpdate
 )
 
-router = APIRouter(
-    prefix='/meeting_rooms',
-    tags=['Meeting Rooms'],
-)
+router = APIRouter()
 
 
 @router.post(
