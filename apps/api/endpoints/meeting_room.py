@@ -4,9 +4,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.db import get_async_session
-# Вместо импортов 6 функций импортируйте объект meeting_room_crud.
 from crud.meeting_room import meeting_room_crud
-from models.meeting_room import MeetingRoom
+from api.validators import check_meeting_room_exists, check_name_duplicate
 from schemas.meeting_room import (
     MeetingRoomCreate, MeetingRoomDB, MeetingRoomUpdate
 )
@@ -78,31 +77,4 @@ async def remove_meeting_room(
     meeting_room = await check_meeting_room_exists(meeting_room_id, session)
     # Замените вызов функции на вызов метода.
     meeting_room = await meeting_room_crud.remove(meeting_room, session)
-    return meeting_room
-
-
-async def check_name_duplicate(
-        room_name: str,
-        session: AsyncSession,
-) -> None:
-    # Замените вызов функции на вызов метода.
-    room_id = await meeting_room_crud.get_room_id_by_name(room_name, session)
-    if room_id is not None:
-        raise HTTPException(
-            status_code=422,
-            detail='Переговорка с таким именем уже существует!',
-        )
-
-        
-async def check_meeting_room_exists(
-        meeting_room_id: int,
-        session: AsyncSession,
-) -> MeetingRoom:
-    # Замените вызов функции на вызов метода.
-    meeting_room = await meeting_room_crud.get(meeting_room_id, session)
-    if meeting_room is None:
-        raise HTTPException(
-            status_code=404,
-            detail='Переговорка не найдена!'
-        )
     return meeting_room
