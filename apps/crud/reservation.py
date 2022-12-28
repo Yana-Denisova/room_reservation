@@ -1,6 +1,6 @@
 from datetime import datetime
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import and_, between, or_, select
+from sqlalchemy import and_, select
 
 from crud.base import CRUDBase
 from models.reservation import Reservation
@@ -26,3 +26,6 @@ class CRUDReservation(CRUDBase):
         )
         reservations = reservations.scalars().all()
         return reservations
+
+
+reservation_crud = CRUDReservation(Reservation)
