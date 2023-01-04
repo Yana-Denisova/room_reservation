@@ -3,8 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from crud.meeting_room import meeting_room_crud
 from crud.reservation import reservation_crud
-from models.meeting_room import MeetingRoom
-from models.reservation import Reservation
+from models import Reservation, User, MeetingRoom
 
 
 async def check_name_duplicate(
@@ -45,12 +44,17 @@ async def check_reservation_intersections(**kwargs) -> None:
 
 async def check_reservation_before_edit(
         reservation_id: int,
-        session: AsyncSession, 
+        session: AsyncSession,
+        user: User,
 ) -> Reservation:
     reservation = await reservation_crud.get(
-        # Для понятности кода можно передавать аргументы по ключу.
-        obj_id=reservation_id, session=session 
+        obj_id=reservation_id, session=session
     )
     if not reservation:
         raise HTTPException(status_code=404, detail='Бронь не найдена!')
+    if reservation.user_id != user.id and not user.is_superuser:
+        raise HTTPException(
+            status_code=403,
+            detail='Невозможно редактировать или удалить чужую бронь!'
+        )
     return reservation
