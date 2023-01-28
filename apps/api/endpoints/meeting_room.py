@@ -2,15 +2,15 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from core.user import current_superuser
-from core.db import get_async_session
-from crud.meeting_room import meeting_room_crud
-from crud.reservation import reservation_crud
-from api.validators import check_meeting_room_exists, check_name_duplicate
-from schemas.meeting_room import (
+from apps.core.user import current_superuser
+from apps.core.db import get_async_session
+from apps.crud.meeting_room import meeting_room_crud
+from apps.crud.reservation import reservation_crud
+from apps.api.validators import check_meeting_room_exists, check_name_duplicate
+from apps.schemas.meeting_room import (
     MeetingRoomCreate, MeetingRoomDB, MeetingRoomUpdate
 )
-from schemas.reservation import ReservationDB
+from apps.schemas.reservation import ReservationDB
 
 
 router = APIRouter()

@@ -4,8 +4,8 @@ from typing import Optional
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from crud.base import CRUDBase
-from models.meeting_room import MeetingRoom
+from apps.crud.base import CRUDBase
+from apps.models.meeting_room import MeetingRoom
 
 
 # Создаем новый класс, унаследованный от CRUDBase.

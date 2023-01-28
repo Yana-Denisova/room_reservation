@@ -1,10 +1,10 @@
 from datetime import datetime
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import and_, select
+from sqlalchemy import and_, select, between, func, or_
 from typing import Optional
 
-from crud.base import CRUDBase
-from models import Reservation, User
+from apps.models import Reservation, User
+from apps.crud.base import CRUDBase
 
 
 class CRUDReservation(CRUDBase):
@@ -18,7 +18,6 @@ class CRUDReservation(CRUDBase):
         from_reserve: datetime,
         to_reserve: datetime,
         meetingroom_id: int,
-        # Добавляем новый опциональный параметр - id объекта бронирования.
         reservation_id: Optional[int] = None,
         session: AsyncSession,
     ) -> list[Reservation]:
@@ -37,11 +36,10 @@ class CRUDReservation(CRUDBase):
                 # id искомых объектов не равны id обновляемого объекта.
                 Reservation.id != reservation_id
             )
-        # Выполняем запрос.
+
         reservations = await session.execute(select_stmt)
         reservations = reservations.scalars().all()
         return reservations
-    
 
     async def get_future_reservations_for_room(
         self,
@@ -68,5 +66,22 @@ class CRUDReservation(CRUDBase):
                 )
         )
         return reservations.scalars().all()
+    
+    async def get_count_res_at_the_same_time(
+            self,
+            from_reserve: datetime,
+            to_reserve: datetime,
+            session: AsyncSession,
+    ) -> list[dict[str, int]]:
+        reservations = await session.execute(
+            select([Reservation.meetingroom_id,
+                    func.count(Reservation.meetingroom_id)]).where(
+                Reservation.from_reserve >= from_reserve,
+                Reservation.to_reserve <= to_reserve
+            ).group_by(Reservation.meetingroom_id)
+        )
+        reservations = reservations.all()
+        return reservations
+
 
 reservation_crud = CRUDReservation(Reservation)

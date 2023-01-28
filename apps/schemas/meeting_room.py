@@ -16,6 +16,7 @@ class MeetingRoomCreate(MeetingRoomBase):
     # Переопределяем атрибут name, делаем его обязательным.
     name: str = Field(..., min_length=1, max_length=100)
     # Описывать поле description не нужно: оно уже есть в базовом классе.
+
     @validator('name')
     def name_cant_be_empty(cls, value: str):
         if not value:
@@ -24,7 +25,7 @@ class MeetingRoomCreate(MeetingRoomBase):
 
 
 class MeetingRoomUpdate(MeetingRoomBase):
-    
+
     @validator('name')
     def name_cannot_be_null(cls, value):
         if value is None:
@@ -32,10 +33,10 @@ class MeetingRoomUpdate(MeetingRoomBase):
         return value
 
 
-# Возвращаемую схему унаследуем от MeetingRoomCreate, 
+# Возвращаемую схему унаследуем от MeetingRoomCreate,
 # чтобы снова не описывать обязательное поле name.
 class MeetingRoomDB(MeetingRoomCreate):
     id: int
-    
+
     class Config:
         orm_mode = True
