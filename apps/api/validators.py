@@ -17,7 +17,7 @@ async def check_name_duplicate(
             detail='Переговорка с таким именем уже существует!',
         )
 
-        
+
 async def check_meeting_room_exists(
         meeting_room_id: int,
         session: AsyncSession,

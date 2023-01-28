@@ -20,6 +20,8 @@ router.include_router(
     prefix='/users',
     tags=['users'],
 )
+
+
 @router.delete(
     '/users/{id}',
     tags=['users'],

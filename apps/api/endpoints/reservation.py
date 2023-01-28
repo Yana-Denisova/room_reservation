@@ -18,6 +18,7 @@ from apps.models import User
 
 router = APIRouter()
 
+
 @router.post(
     '/',
     response_model=ReservationDB

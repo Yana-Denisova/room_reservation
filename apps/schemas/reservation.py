@@ -22,7 +22,7 @@ class ReservationBase(BaseModel):
 
 
 class ReservationUpdate(ReservationBase):
-    
+
     @validator('from_reserve')
     def check_from_reserve_later_than_now(cls, value):
         if value <= datetime.now():
@@ -50,6 +50,6 @@ class ReservationDB(ReservationBase):
     id: int
     meetingroom_id: int
     user_id: Optional[int]
-    
+
     class Config:
         orm_mode = True

@@ -1,6 +1,6 @@
 from datetime import datetime
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import and_, select, between, func, or_
+from sqlalchemy import and_, select, func
 from typing import Optional
 
 from apps.models import Reservation, User
@@ -8,12 +8,9 @@ from apps.crud.base import CRUDBase
 
 
 class CRUDReservation(CRUDBase):
-    
+
     async def get_reservations_at_the_same_time(
         self,
-        # Добавляем звёздочку, чтобы обозначить, что все дальнейшие параметры
-        # должны передаваться по ключу. Это позволит располагать 
-        # параметры со значением по умолчанию перед параметрами без таких значений.
         *,
         from_reserve: datetime,
         to_reserve: datetime,
@@ -21,7 +18,6 @@ class CRUDReservation(CRUDBase):
         reservation_id: Optional[int] = None,
         session: AsyncSession,
     ) -> list[Reservation]:
-        # Выносим уже существующий запрос в отдельное выражение.
         select_stmt = select(Reservation).where(
             Reservation.meetingroom_id == meetingroom_id,
             and_(
@@ -29,11 +25,8 @@ class CRUDReservation(CRUDBase):
                 to_reserve >= Reservation.from_reserve
             )
         )
-        # Если передан id бронирования...
         if reservation_id is not None:
-            # ... то к выражению нужно добавить новое условие.
             select_stmt = select_stmt.where(
-                # id искомых объектов не равны id обновляемого объекта.
                 Reservation.id != reservation_id
             )
 
@@ -54,7 +47,7 @@ class CRUDReservation(CRUDBase):
         )
         reservations = reservations.scalars().all()
         return reservations
-    
+
     async def get_by_user(
         self,
         user: User,
@@ -66,7 +59,7 @@ class CRUDReservation(CRUDBase):
                 )
         )
         return reservations.scalars().all()
-    
+
     async def get_count_res_at_the_same_time(
             self,
             from_reserve: datetime,
